@@ -37,7 +37,7 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		getWordLadderDFS("a","b");
+		getWordLadderBFS("a","b");
 		// TODO methods to read in words, output ladder
 	}
 	
@@ -117,7 +117,7 @@ public class Main {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
-			infile = new Scanner (new File("five_letter_words.txt"));
+			infile = new Scanner (new File("short_dict.txt"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
