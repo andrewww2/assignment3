@@ -37,8 +37,12 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		getWordLadderBFS("a","b");
+		
+		
 		// TODO methods to read in words, output ladder
+		String start = inputs.get(0);
+		String end = inputs.get(1);
+		getWordLadderBFS(start,end);
 	}
 	
 	public static void initialize() {
@@ -83,23 +87,28 @@ public class Main {
 		// TODO some code
 		Set<String> dict = makeDictionary();
 		Queue<String> queue = new LinkedList<String>();
-		queue.add(start);
+		queue.add(start);										//Remove because it has been "discovered"
 		int wordsInLayer = 1;
 		boolean endFound = false;
-		while ((wordsInLayer > 0) && (!endFound)) {
+		
+		while ((wordsInLayer > 0) && (!endFound)) {				//Ends when layer is empty or the word is found
 			wordsInLayer = 0;
-			int currentLength = queue.size();
-			for (int i = 0; i < currentLength; i++) {
+			int layerSize = queue.size();					//# of words in current layer
+			for (int i = 0; i < layerSize; i++) {
 				String currentWord = queue.remove();
+				Set<String> tempDict = new HashSet<String>();
+				tempDict.addAll(dict);
 				for (String dictWord : dict) {
 					if (isRelated(currentWord, dictWord)) {
 						queue.add(dictWord);
+						tempDict.remove(dictWord);
 						wordsInLayer++;
-						if (dictWord == end) {
+						if (dictWord.equals(end)) {
 							endFound = true;
 						}
 					}
 				}
+				dict = tempDict;
 			}
 		}
 		
@@ -117,7 +126,7 @@ public class Main {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
-			infile = new Scanner (new File("short_dict.txt"));
+			infile = new Scanner (new File("five_letter_wordsx.txt"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
