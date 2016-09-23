@@ -61,7 +61,7 @@ public class Main {
 				System.out.println("quitting");
 				return inputs; //return empty array List
 			}
-			inputs.add(word);
+			inputs.add(word.toUpperCase());
 		}	
 		System.out.println(inputs.toString());
 		return inputs;
