@@ -42,7 +42,8 @@ public class Main {
 		// TODO methods to read in words, output ladder
 		String start = inputs.get(0);
 		String end = inputs.get(1);
-		getWordLadderBFS(start,end);
+		ArrayList <String> wordLadBFS  = getWordLadderBFS(start,end);
+		printLadder(wordLadBFS);
 	}
 	
 	public static void initialize() {
@@ -85,6 +86,12 @@ public class Main {
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
 		// TODO some code
+    	ArrayList <String> result = new ArrayList<String>();  // store words in word ladder
+    	
+    	if (start.equals(end)) // return empty array list of start == end
+    		return result;
+    	
+    	result.add(start);	
 		Set<String> dict = makeDictionary();
 		Queue<String> queue = new LinkedList<String>();
 		queue.add(start);										//Remove because it has been "discovered"
@@ -101,9 +108,11 @@ public class Main {
 				for (String dictWord : dict) {
 					if (isRelated(currentWord, dictWord)) {
 						queue.add(dictWord);
-						tempDict.remove(dictWord);
+						tempDict.remove(dictWord);			// "mark" word as visited already
 						wordsInLayer++;
+						result.add(dictWord);
 						if (dictWord.equals(end)) {
+							result.add(end);
 							endFound = true;
 						}
 					}
@@ -114,19 +123,20 @@ public class Main {
 		
 		if (endFound) {
 			System.out.println("End Found");
-		}
-		else {
-			System.out.println("End Not Found");
+			return result;
 		}
 		
-		return null; // replace this line later with real return
+		System.out.println("End Not Found");
+		return new ArrayList<String>();  // return empty ArrayList
+		
+		//return null; // replace this line later with real return
 	}
     
 	public static Set<String>  makeDictionary () {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
-			infile = new Scanner (new File("five_letter_wordsx.txt"));
+			infile = new Scanner (new File("five_letter_words.txt"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
@@ -139,16 +149,18 @@ public class Main {
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
-		
+		for (String s: ladder){
+			System.out.println(s);
+		}
 	}
 	// TODO
 	// Other private static methods here
 	
 	/**
-	  * This method gets the user's input after he/she presses enter. 
-	  * Also prints out a prompt for the user
-	  * @param Scanner object connected to keyboard
-	  * @return String that the user entered
+	  * This method determines if  one letter in currWord is different from nextWord
+	  * @param currWord is the word at the current "node"
+	  * @param nextWord is some other word to compare to. 
+	  * @return true if one letter in currWord is different from nextWord
 	  */
 	private static boolean isRelated (String currWord, String nextWord){
 		// check if words are the same length. Words should be 5 chars long for this lab
@@ -166,4 +178,5 @@ public class Main {
 			return true;
 		return false;  // should not encounter same word again
 	}
+	
 }
