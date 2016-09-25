@@ -43,6 +43,8 @@ public class Main {
 		String start = inputs.get(0);
 		String end = inputs.get(1);
 		getWordLadderBFS(start,end);
+		
+		getWordLadderDFS(start, end);
 	}
 	
 	
@@ -78,8 +80,32 @@ public class Main {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
-		// TODO some code
 		Set<String> dict = makeDictionary();
+		Set<String> tempDict = new HashSet<String>();
+		tempDict.addAll(dict);
+		
+		if (start.equals(end)){
+			ArrayList<String> result = new ArrayList<String>();
+			result.add(end);
+			return result;  //what to return?
+		}
+		else{
+			
+			for (String dictWord : dict) {
+				if (isRelated(start, dictWord)) {
+					//visit neighbor of words
+					// HELP!!! - how do I accumulate an arrayLists of related words between a recursive call?
+					//DFSarr.add((getWordLadderDFS(dictWord, end)).get(0));
+					getWordLadderDFS(dictWord, end);
+					
+					// mark word as "visited"
+					tempDict.remove(dictWord); 
+					dict = tempDict;
+				}
+			}
+			
+		}
+		
 		// TODO more code
 		
 		return null; // replace this line later with real return
