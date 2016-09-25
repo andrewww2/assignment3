@@ -125,6 +125,7 @@ public class Main {
 		}
 		
 		if (endFound) {
+			ArrayList<String> wordLadder = findLadder(start, end, discoveredWords, parentWords);
 			printLadder(wordLadder);
 		}
 		else {
@@ -200,6 +201,8 @@ public class Main {
 	 * @param parents : ArrayList of the parents of the discovered words, with the same indices
 	 * @return : an ArrayList of words from start -> end
 	 */
+	private static ArrayList<String> findLadder(String start, String end, 
+			ArrayList<String> words, ArrayList<String> parents) {
 		ArrayList<String> wordLadder = new ArrayList<String>();
 		String currentWord = end;
 		wordLadder.add(currentWord);
