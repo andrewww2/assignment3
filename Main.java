@@ -45,11 +45,13 @@ public class Main {
 		getWordLadderBFS(start,end);
 	}
 	
+	
 	public static void initialize() {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
 	}
+	
 	
 	/**
 	 * @param keyboard Scanner connected to System.in
@@ -57,7 +59,7 @@ public class Main {
 	 * If command is /quit, return empty ArrayList. 
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
-		// TO DO
+		
 		ArrayList<String> inputs = new ArrayList<String>();
 		for (int k = 0; k < 2; k++){
 			String word = keyboard.next();
@@ -67,9 +69,10 @@ public class Main {
 			}
 			inputs.add(word.toUpperCase());
 		}	
-		System.out.println(inputs.toString());
+		
 		return inputs;
 	}
+	
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
@@ -82,10 +85,17 @@ public class Main {
 		return null; // replace this line later with real return
 	}
 	
+	/**
+	 * creates a word ladder using a breadth-first-search algorithm
+	 * @param start : beginning of word ladder
+	 * @param end : end of word ladder
+	 * @return : void, but does print word ladder
+	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
-		// TODO some code
-		Set<String> dict = makeDictionary();
+		Set<String> dict = makeDictionary();						//Complete list of words
+		ArrayList<String> discoveredWords = new ArrayList<String>();	//Used to store discovered words 
+		ArrayList<String> parentWords = new ArrayList<String>();	//Used to store 'parents' of discovered words 
 		Queue<String> queue = new LinkedList<String>();
 		queue.add(start);										//Remove because it has been "discovered"
 		int wordsInLayer = 1;
@@ -101,6 +111,8 @@ public class Main {
 				for (String dictWord : dict) {
 					if (isRelated(currentWord, dictWord)) {
 						queue.add(dictWord);
+						discoveredWords.add(dictWord);
+						parentWords.add(currentWord);	//discoveredWord and parentWord will have same index
 						tempDict.remove(dictWord);
 						wordsInLayer++;
 						if (dictWord.equals(end)) {
@@ -113,20 +125,23 @@ public class Main {
 		}
 		
 		if (endFound) {
-			System.out.println("End Found");
+			printLadder(wordLadder);
 		}
 		else {
-			System.out.println("End Not Found");
+			start = start.toLowerCase();			//formatting
+			end = end.toLowerCase();
+			System.out.println("no word ladder can be found between " + start + " and " + end + ".");
 		}
 		
 		return null; // replace this line later with real return
 	}
     
+    
 	public static Set<String>  makeDictionary () {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
-			infile = new Scanner (new File("five_letter_wordsx.txt"));
+			infile = new Scanner (new File("five_letter_words.txt"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
@@ -138,11 +153,20 @@ public class Main {
 		return words;
 	}
 	
+	
 	public static void printLadder(ArrayList<String> ladder) {
-		
+		int length = ladder.size();
+		String start = ladder.get(0);
+		String end = ladder.get(length - 1);
+		start = start.toLowerCase();		//formatting
+		end = end.toLowerCase(); 
+		System.out.println("a " + length + "-rung word ladder exist between " + start + " and " + end + ".");
+		for (String word : ladder) {
+			word = word.toLowerCase(); 		//formatting
+			System.out.println(word);
+		}
 	}
-	// TODO
-	// Other private static methods here
+	
 	
 	/**
 	  * This method gets the user's input after he/she presses enter. 
@@ -166,4 +190,33 @@ public class Main {
 			return true;
 		return false;  // should not encounter same word again
 	}
+
+	
+	/**
+	 * This method used all of the discovered words to find the word ladder from start -> end
+	 * @param start : beginning of ladder
+	 * @param end : end of ladder
+	 * @param words : ArrayList of all discovered words
+	 * @param parents : ArrayList of the parents of the discovered words, with the same indices
+	 * @return : an ArrayList of words from start -> end
+	 */
+		ArrayList<String> wordLadder = new ArrayList<String>();
+		String currentWord = end;
+		wordLadder.add(currentWord);
+		
+		while (currentWord != start) {
+			int i = words.indexOf(currentWord);		//Find location of current word
+			currentWord = parents.get(i);			//Use that location to get parent
+			wordLadder.add(currentWord);
+		}
+		
+		//Now reverse the word ladder so you go from start -> end
+		ArrayList<String> reversedWordLadder = new ArrayList<String>();
+		for (int j = wordLadder.size(); j > 0; j--) {
+			reversedWordLadder.add(wordLadder.get(j-1));
+		}
+		
+		return reversedWordLadder;
+	}
+	
 }
