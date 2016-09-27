@@ -44,7 +44,7 @@ public class Main {
 		String end = inputs.get(1);
 		getWordLadderBFS(start,end);
 		
-		getWordLadderDFS(start, end);
+		System.out.println(getWordLadderDFS(start, end));
 	}
 	
 	
@@ -75,40 +75,52 @@ public class Main {
 		return inputs;
 	}
 	
+	public static ArrayList<String> getWordLadderDFS(String start, String end)
+	{
+		ArrayList<String> dfsResult= new ArrayList<String>();
+		Set<String> dict = makeDictionary();
+		myDfs(start, end, dfsResult, dict);
+		return dfsResult;
+	}
 	
-	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+	public static boolean myDfs(String start, String end, ArrayList <String> parentN, Set <String> dict) {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
-		Set<String> dict = makeDictionary();
+		//Set<String> dict = makeDictionary();
 		Set<String> tempDict = new HashSet<String>();
 		tempDict.addAll(dict);
 		
 		if (start.equals(end)){
-			ArrayList<String> result = new ArrayList<String>();
-			result.add(end);
-			return result;  //what to return?
+			parentN.add(end);
+			//TODO: ADD ALL ANCESTORS OF THE DESTINATION
+			return true;
+		}
+		else if (dict.size() == 0){
+			return false;
 		}
 		else{
-			
 			for (String dictWord : dict) {
 				if (isRelated(start, dictWord)) {
-					//visit neighbor of words
-					// HELP!!! - how do I accumulate an arrayLists of related words between a recursive call?
-					//DFSarr.add((getWordLadderDFS(dictWord, end)).get(0));
-					getWordLadderDFS(dictWord, end);
-					
+					//visit neighbor of words\
 					// mark word as "visited"
-					tempDict.remove(dictWord); 
-					dict = tempDict;
+					tempDict.remove(dictWord);
+					if (myDfs(dictWord, end, parentN, tempDict)){
+						parentN.add(start);
+					}
+					
+					
+					//tempDict.remove(dictWord); 
+					//dict = tempDict;
 				}
 			}
+			//TODO: // return false when there is no children to be expanded
 			
 		}
 		
 		// TODO more code
 		
-		return null; // replace this line later with real return
+		return false; // replace this line later with real return
 	}
 	
 	/**
