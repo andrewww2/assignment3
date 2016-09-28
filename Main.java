@@ -84,71 +84,31 @@ public class Main {
 	public static ArrayList<String> getWordLadderDFS(String start, String end)
 	{
 		ArrayList<String> dfsResult= new ArrayList<String>();
-		
-		//myDfs(start, end, dfsResult, dict);
+
 		
 		boolean found = false;
 		 // the jankiest code that every lived
 		try{
-			found = myDFS2(start, end, dfsResult);
+			found = myDfs(start, end, dfsResult);
+			ArrayList<String> reversedLadder = new ArrayList<String>();
+			for (int i = dfsResult.size(); i > 0; i--) {
+				reversedLadder.add(dfsResult.get(i-1));
+			}
+			dfsResult = reversedLadder;
 		}
 		catch (StackOverflowError uber){
-			found = myDFS2(end, start, dfsResult);
+			found = myDfs(end, start, dfsResult);
 		}
 		
 		if (!found) {
-			System.out.println("Ladder not found!");
+			System.out.println("no word ladder can be found between " + start + " and " + end + ".");
 		}
 		//Reverse ladder to get correct ladder
-		ArrayList<String> reversedLadder = new ArrayList<String>();
-		for (int i = dfsResult.size(); i > 0; i--) {
-			reversedLadder.add(dfsResult.get(i-1));
-		}
-		return reversedLadder;
+		
+		return dfsResult;
 	}
 	
-	public static boolean myDfs(String start, String end, ArrayList <String> parentN, Set <String> dict) {
-		
-		// Returned list should be ordered start to end.  Include start and end.
-		// Return empty list if no ladder.
-		//Set<String> dict = makeDictionary();
-		Set<String> tempDict = new HashSet<String>();
-		tempDict.addAll(dict);
-		
-		if (start.equals(end)){
-			parentN.add(end);
-			//TODO: ADD ALL ANCESTORS OF THE DESTINATION
-			return true;
-		}
-		else if (dict.size() == 0){
-			return false;
-		}
-		else{
-			for (String dictWord : dict) {
-				if (isRelated(start, dictWord)) {
-					//visit neighbor of words\
-					// mark word as "visited"
-					tempDict.remove(dictWord);
-					if (myDfs(dictWord, end, parentN, tempDict)){
-						parentN.add(start);
-						break;
-					}
-					
-					
-					//tempDict.remove(dictWord); 
-					//dict = tempDict;
-				}
-			}
-			//TODO: // return false when there is no children to be expanded
-			
-		}
-		
-		// TODO more code
-		
-		return false; // replace this line later with real return
-	}
-	
-	private static boolean myDFS2(String start, String end, ArrayList<String> ladder) throws StackOverflowError {
+	private static boolean myDfs(String start, String end, ArrayList<String> ladder) throws StackOverflowError {
 		dfsMarked[dict.indexOf(start)] = true;
 		if (start.equals(end)) {
 			ladder.add(end);
@@ -160,7 +120,7 @@ public class Main {
 					String newWord = start.substring(0, i) + end.charAt(i) + start.substring(i + 1);
 					if (dict.contains(newWord)) {
 						if (!dfsMarked[dict.indexOf(newWord)]) {
-							if (myDFS2(newWord, end, ladder)) {
+							if (myDfs(newWord, end, ladder)) {
 								ladder.add(start);
 								return true;
 							}
@@ -171,7 +131,7 @@ public class Main {
 			for (String dictWord : dict) {
 				if (isRelated(start, dictWord)) {
 					if (!dfsMarked[dict.indexOf(dictWord)]) {
-						if (myDFS2(dictWord, end, ladder)) {
+						if (myDfs(dictWord, end, ladder)) {
 							ladder.add(start);
 							return true;
 						}
