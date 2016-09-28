@@ -20,9 +20,9 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
-	static Set<String> dict2 = makeDictionary();
-	static ArrayList<String> dict = new ArrayList<String>(dict2);
-	static boolean[] dfsMarked = new boolean[dict.size()];
+	static Set<String> dictSet;
+	static ArrayList<String> dict;
+	static boolean[] dfsMarked;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -55,6 +55,9 @@ public class Main {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		dictSet = makeDictionary();
+		dict = new ArrayList<String>(dictSet);
+		dfsMarked = new boolean[dict.size()];
 	}
 	
 	
