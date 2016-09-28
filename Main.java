@@ -84,7 +84,15 @@ public class Main {
 		
 		//myDfs(start, end, dfsResult, dict);
 		
-		boolean found = myDFS2(start, end, dfsResult);
+		boolean found = false;
+		 // the jankiest code that every lived
+		try{
+			found = myDFS2(start, end, dfsResult);
+		}
+		catch (StackOverflowError uber){
+			found = myDFS2(end, start, dfsResult);
+		}
+		
 		if (!found) {
 			System.out.println("Ladder not found!");
 		}
@@ -137,7 +145,7 @@ public class Main {
 		return false; // replace this line later with real return
 	}
 	
-	private static boolean myDFS2(String start, String end, ArrayList<String> ladder) {
+	private static boolean myDFS2(String start, String end, ArrayList<String> ladder) throws StackOverflowError {
 		dfsMarked[dict.indexOf(start)] = true;
 		if (start.equals(end)) {
 			ladder.add(end);
