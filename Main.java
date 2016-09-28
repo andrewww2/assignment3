@@ -97,10 +97,17 @@ public class Main {
 			dfsResult = reversedLadder;
 		}
 		catch (StackOverflowError uber){
-			found = myDfs(end, start, dfsResult);
+			try {
+				found = myDfs(end, start, dfsResult);
+			}
+			catch (StackOverflowError giveUp) {
+				//Do nothing, after two overflows we just assume that there is no word ladder
+			}
 		}
 		
 		if (!found) {
+			start = start.toLowerCase();
+			end = end.toLowerCase();
 			System.out.println("no word ladder can be found between " + start + " and " + end + ".");
 		}
 		//Reverse ladder to get correct ladder
