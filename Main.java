@@ -45,7 +45,7 @@ public class Main {
 		// TODO methods to read in words, output ladder
 		String start = inputs.get(0);
 		String end = inputs.get(1);
-		getWordLadderBFS(start,end);
+		printLadder(getWordLadderBFS(start,end));
 		
 		printLadder(getWordLadderDFS(start,end));
 	}
@@ -189,7 +189,7 @@ public class Main {
 	 * @return : void, but does print word ladder
 	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
-		
+    	ArrayList<String> wordLadder = new ArrayList<String>();
 		Set<String> dict = makeDictionary();						//Complete list of words
 		ArrayList<String> discoveredWords = new ArrayList<String>();	//Used to store discovered words 
 		ArrayList<String> parentWords = new ArrayList<String>();	//Used to store 'parents' of discovered words 
@@ -226,8 +226,8 @@ public class Main {
 		}
 		
 		if (endFound) {
-			ArrayList<String> wordLadder = findLadderBFS(start, end, discoveredWords, parentWords);
-			printLadder(wordLadder);
+			wordLadder = findLadderBFS(start, end, discoveredWords, parentWords);
+			//printLadder(wordLadder);
 		}
 		else {
 			start = start.toLowerCase();			//formatting
@@ -235,7 +235,7 @@ public class Main {
 			System.out.println("no word ladder can be found between " + start + " and " + end + ".");
 		}
 		
-		return null; // replace this line later with real return
+		return wordLadder; // replace this line later with real return
 	}
     
     
@@ -257,16 +257,18 @@ public class Main {
 	
 	
 	public static void printLadder(ArrayList<String> ladder) {
-		int length = ladder.size();
-		String start = ladder.get(0);
-		String end = ladder.get(length - 1);
-		start = start.toLowerCase();		//formatting
-		end = end.toLowerCase(); 
-		int rungs = length - 2;				//length - start - end
-		System.out.println("a " + rungs + "-rung word ladder exist between " + start + " and " + end + ".");
-		for (String word : ladder) {
-			word = word.toLowerCase(); 		//formatting
-			System.out.println(word);
+		if (ladder.size() > 0){
+			int length = ladder.size();
+			String start = ladder.get(0);
+			String end = ladder.get(length - 1);
+			start = start.toLowerCase();		//formatting
+			end = end.toLowerCase(); 
+			int rungs = length - 2;				//length - start - end
+			System.out.println("a " + rungs + "-rung word ladder exist between " + start + " and " + end + ".");
+			for (String word : ladder) {
+				word = word.toLowerCase(); 		//formatting
+				System.out.println(word);
+			}
 		}
 	}
 	
