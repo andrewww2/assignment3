@@ -20,6 +20,9 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
+	static Set<String> dict2 = makeDictionary();
+	static ArrayList<String> dict = new ArrayList<String>(dict2);
+	static boolean[] dfsMarked = new boolean[dict.size()];
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -78,17 +81,12 @@ public class Main {
 	public static ArrayList<String> getWordLadderDFS(String start, String end)
 	{
 		ArrayList<String> dfsResult= new ArrayList<String>();
-		Set<String> dict = makeDictionary();
-		ArrayList<String> dict2 = new ArrayList<String>(dict);
 		
 		//myDfs(start, end, dfsResult, dict);
-		boolean[] marked = new boolean[dict2.size()];
-		for (boolean i : marked) {
-			i = false;
-		}
-		boolean found = myDFS2(start, end, dfsResult, marked);
+		
+		boolean found = myDFS2(start, end, dfsResult);
 		if (!found) {
-			System.out.println("Help!");
+			System.out.println("Ladder not found!");
 		}
 		//Reverse ladder to get correct ladder
 		ArrayList<String> reversedLadder = new ArrayList<String>();
@@ -139,36 +137,30 @@ public class Main {
 		return false; // replace this line later with real return
 	}
 	
-	private static boolean myDFS2(String start, String end, ArrayList<String> ladder, boolean[] marked) {
-		Set<String> dict2 = makeDictionary();
-		ArrayList<String> dict = new ArrayList<String>(dict2);
+	private static boolean myDFS2(String start, String end, ArrayList<String> ladder) {
+		dfsMarked[dict.indexOf(start)] = true;
 		if (start.equals(end)) {
 			ladder.add(end);
 			return true;
 		}
-		else if (dict.size() == 0) {
-			return false;
-		}
 		else {
-			/*for (int i = 0; i < end.length(); i++) {
+			for (int i = 0; i < end.length(); i++) {
 				if (start.charAt(i) != end.charAt(i)) {
 					String newWord = start.substring(0, i) + end.charAt(i) + start.substring(i + 1);
 					if (dict.contains(newWord)) {
-						if (!marked[dict.indexOf(newWord)]) {
-							marked[dict.indexOf(newWord)] = true;
-							if (myDFS2(newWord, end, ladder, marked)) {
+						if (!dfsMarked[dict.indexOf(newWord)]) {
+							if (myDFS2(newWord, end, ladder)) {
 								ladder.add(start);
 								return true;
 							}
 						}
 					}
 				}
-			} */
+			} 
 			for (String dictWord : dict) {
 				if (isRelated(start, dictWord)) {
-					if (!marked[dict.indexOf(dictWord)]) {
-						marked[dict.indexOf(dictWord)] = true;
-						if (myDFS2(dictWord, end, ladder, marked)) {
+					if (!dfsMarked[dict.indexOf(dictWord)]) {
+						if (myDFS2(dictWord, end, ladder)) {
 							ladder.add(start);
 							return true;
 						}
@@ -176,7 +168,7 @@ public class Main {
 				}
 			}
 		}
-		return false;
+	return false;
 	}
 	
 	/**
