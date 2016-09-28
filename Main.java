@@ -44,7 +44,7 @@ public class Main {
 		String end = inputs.get(1);
 		getWordLadderBFS(start,end);
 		
-		System.out.println(getWordLadderDFS(start, end));
+		printLadder(getWordLadderDFS(start,end));
 	}
 	
 	
@@ -79,8 +79,23 @@ public class Main {
 	{
 		ArrayList<String> dfsResult= new ArrayList<String>();
 		Set<String> dict = makeDictionary();
-		myDfs(start, end, dfsResult, dict);
-		return dfsResult;
+		ArrayList<String> dict2 = new ArrayList<String>(dict);
+		
+		//myDfs(start, end, dfsResult, dict);
+		boolean[] marked = new boolean[dict2.size()];
+		for (boolean i : marked) {
+			i = false;
+		}
+		boolean found = myDFS2(start, end, dfsResult, marked);
+		if (!found) {
+			System.out.println("Help!");
+		}
+		//Reverse ladder to get correct ladder
+		ArrayList<String> reversedLadder = new ArrayList<String>();
+		for (int i = dfsResult.size(); i > 0; i--) {
+			reversedLadder.add(dfsResult.get(i-1));
+		}
+		return reversedLadder;
 	}
 	
 	public static boolean myDfs(String start, String end, ArrayList <String> parentN, Set <String> dict) {
@@ -107,6 +122,7 @@ public class Main {
 					tempDict.remove(dictWord);
 					if (myDfs(dictWord, end, parentN, tempDict)){
 						parentN.add(start);
+						break;
 					}
 					
 					
@@ -121,6 +137,46 @@ public class Main {
 		// TODO more code
 		
 		return false; // replace this line later with real return
+	}
+	
+	private static boolean myDFS2(String start, String end, ArrayList<String> ladder, boolean[] marked) {
+		Set<String> dict2 = makeDictionary();
+		ArrayList<String> dict = new ArrayList<String>(dict2);
+		if (start.equals(end)) {
+			ladder.add(end);
+			return true;
+		}
+		else if (dict.size() == 0) {
+			return false;
+		}
+		else {
+			/*for (int i = 0; i < end.length(); i++) {
+				if (start.charAt(i) != end.charAt(i)) {
+					String newWord = start.substring(0, i) + end.charAt(i) + start.substring(i + 1);
+					if (dict.contains(newWord)) {
+						if (!marked[dict.indexOf(newWord)]) {
+							marked[dict.indexOf(newWord)] = true;
+							if (myDFS2(newWord, end, ladder, marked)) {
+								ladder.add(start);
+								return true;
+							}
+						}
+					}
+				}
+			} */
+			for (String dictWord : dict) {
+				if (isRelated(start, dictWord)) {
+					if (!marked[dict.indexOf(dictWord)]) {
+						marked[dict.indexOf(dictWord)] = true;
+						if (myDFS2(dictWord, end, ladder, marked)) {
+							ladder.add(start);
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -138,6 +194,10 @@ public class Main {
 		queue.add(start);										//Remove because it has been "discovered"
 		int wordsInLayer = 1;
 		boolean endFound = false;
+		
+		if (start == end) {
+			
+		}
 		
 		while ((wordsInLayer > 0) && (!endFound)) {				//Ends when layer is empty or the word is found
 			wordsInLayer = 0;
@@ -163,7 +223,7 @@ public class Main {
 		}
 		
 		if (endFound) {
-			ArrayList<String> wordLadder = findLadder(start, end, discoveredWords, parentWords);
+			ArrayList<String> wordLadder = findLadderBFS(start, end, discoveredWords, parentWords);
 			printLadder(wordLadder);
 		}
 		else {
@@ -199,7 +259,8 @@ public class Main {
 		String end = ladder.get(length - 1);
 		start = start.toLowerCase();		//formatting
 		end = end.toLowerCase(); 
-		System.out.println("a " + length + "-rung word ladder exist between " + start + " and " + end + ".");
+		int rungs = length - 2;				//length - start - end
+		System.out.println("a " + rungs + "-rung word ladder exist between " + start + " and " + end + ".");
 		for (String word : ladder) {
 			word = word.toLowerCase(); 		//formatting
 			System.out.println(word);
@@ -222,6 +283,9 @@ public class Main {
 		for (int i = 0; i < currWord.length(); i++){
 			if (currWord.charAt(i) != nextWord.charAt(i)){
 				diffs++;
+				if (diffs > 1) {
+					return false;
+				}
 			}
 		}
 		
@@ -239,7 +303,7 @@ public class Main {
 	 * @param parents : ArrayList of the parents of the discovered words, with the same indices
 	 * @return : an ArrayList of words from start -> end
 	 */
-	private static ArrayList<String> findLadder(String start, String end, 
+	private static ArrayList<String> findLadderBFS(String start, String end, 
 			ArrayList<String> words, ArrayList<String> parents) {
 		ArrayList<String> wordLadder = new ArrayList<String>();
 		String currentWord = end;
