@@ -51,8 +51,7 @@ public class Main {
 		ArrayList <String> DFS =  getWordLadderDFS(start,end);
 		System.out.println("Does DFS have duplicates? " + hasDuplicates(DFS));
 		printLadder(DFS);
-		//printLadder(getWordLadderBFS(start,end));
-		//printLadder(getWordLadderDFS(start,end));
+
 	}
 	
 	
@@ -144,6 +143,9 @@ public class Main {
 			return true;
 		}
 		else {
+			//Tries to change each different letter of start directly to one of the letters of end
+			//Ex: start = house ; end = magic ; tries changing h -> m, so the word it tries is mouse
+			//Goal is to find a more direct path to end
 			for (int i = 0; i < end.length(); i++) {
 				if (start.charAt(i) != end.charAt(i)) {
 					String newWord = start.substring(0, i) + end.charAt(i) + start.substring(i + 1);
@@ -157,6 +159,7 @@ public class Main {
 					}
 				}
 			} 
+			//If the first algorithm doesn't work, it just goes through all the words in the dictionary
 			for (String dictWord : dict) {
 				if (isRelated(start, dictWord)) {
 					if (!dfsMarked[dict.indexOf(dictWord)]) {
@@ -217,7 +220,6 @@ public class Main {
 		
 		if (endFound) {
 			wordLadder = findLadderBFS(start, end, discoveredWords, parentWords);
-			//printLadder(wordLadder);
 		}
 		else {
 			start = start.toLowerCase();			//formatting
@@ -327,11 +329,16 @@ public class Main {
 		return reversedWordLadder;
 	}
 	
-	private static boolean hasDuplicates(ArrayList<String> wLadder){
-		if (wLadder.size() > 0){
-			for (int i = 0; i < wLadder.size(); i++){
-	    		for (int j = 0; j < wLadder.size(); j++){
-	    			if (i != j && wLadder.get(i).equals(wLadder.get(j))){
+	/**
+	 * Used for testing, checks whether or not a ladder has duplicates
+	 * @param ladder : an ArrayList of Strings, start -> end 
+	 * @return true if there is a duplicate word, false if there are none
+	 */
+	private static boolean hasDuplicates(ArrayList<String> ladder){
+		if (ladder.size() > 0){
+			for (int i = 0; i < ladder.size(); i++){
+	    		for (int j = 0; j < ladder.size(); j++){
+	    			if (i != j && ladder.get(i).equals(ladder.get(j))){
 	    				return true;
 	    			}
 	    		}
