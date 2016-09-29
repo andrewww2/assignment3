@@ -41,12 +41,11 @@ public class Main {
 		}
 		initialize();
 		
-		
-		// TODO methods to read in words, output ladder
+		//Get inputs (start of ladder, end of ladder)
 		String start = inputs.get(0);
 		String end = inputs.get(1);
+		//Output ladders using both BFS and DFS algorithms
 		printLadder(getWordLadderBFS(start,end));
-		
 		printLadder(getWordLadderDFS(start,end));
 	}
 	
@@ -55,6 +54,9 @@ public class Main {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		//We used these for our DFS algorithm
+		//It made more sense for some of our data structures for DFS
+		//    to be initialized globally
 		dictSet = makeDictionary();
 		dict = new ArrayList<String>(dictSet);
 		dfsMarked = new boolean[dict.size()];
@@ -81,40 +83,54 @@ public class Main {
 		return inputs;
 	}
 	
+	
+	/**
+	 * Creates a word ladder using a depth-first-search algorithm
+	 * @param start : beginning of word ladder
+	 * @param end : end of word ladder
+	 * @return : an ArrayList of Strings that is our 'ladder' organized start -> end
+	 */
 	public static ArrayList<String> getWordLadderDFS(String start, String end)
 	{
-		ArrayList<String> dfsResult= new ArrayList<String>();
-
+		ArrayList<String> ladder= new ArrayList<String>();	//The ladder we return
+		boolean found = false;								//Lets us know if there is a path from start -> end
 		
-		boolean found = false;
-		 // the jankiest code that every lived
 		try{
-			found = myDfs(start, end, dfsResult);
-			ArrayList<String> reversedLadder = new ArrayList<String>();
-			for (int i = dfsResult.size(); i > 0; i--) {
-				reversedLadder.add(dfsResult.get(i-1));
+			found = myDfs(start, end, ladder);
+			ArrayList<String> reversedLadder = new ArrayList<String>();	//We reverse the ladder because it is built end -> start
+			for (int i = ladder.size(); i > 0; i--) {
+				reversedLadder.add(ladder.get(i-1));
 			}
-			dfsResult = reversedLadder;
+			ladder = reversedLadder;
 		}
-		catch (StackOverflowError uber){
+		catch (StackOverflowError uber){		//If we get a stack overflow, we try searching from end -> start
 			try {
-				found = myDfs(end, start, dfsResult);
+				found = myDfs(end, start, ladder);
+				//Not necessary to reverse ladder because we built it in the correct order
 			}
 			catch (StackOverflowError giveUp) {
 				//Do nothing, after two overflows we just assume that there is no word ladder
 			}
 		}
 		
-		if (!found) {
+		if (!found) {		
 			start = start.toLowerCase();
 			end = end.toLowerCase();
 			System.out.println("no word ladder can be found between " + start + " and " + end + ".");
 		}
-		//Reverse ladder to get correct ladder
 		
-		return dfsResult;
+		return ladder;
 	}
 	
+	
+	/**
+	 * Recursively finds a ladder between two words
+	 * @param start : beginning of the word ladder
+	 * @param end : end of the word ladder
+	 * @param ladder : ArrayList of word between start and end, built in this method
+	 * @return true if a ladder is found; false if no ladder is found
+	 * @throws StackOverflowError
+	 */
 	private static boolean myDfs(String start, String end, ArrayList<String> ladder) throws StackOverflowError {
 		dfsMarked[dict.indexOf(start)] = true;
 		if (start.equals(end)) {
@@ -149,8 +165,9 @@ public class Main {
 	return false;
 	}
 	
+	
 	/**
-	 * creates a word ladder using a breadth-first-search algorithm
+	 * Creates a word ladder using a breadth-first-search algorithm
 	 * @param start : beginning of word ladder
 	 * @param end : end of word ladder
 	 * @return : void, but does print word ladder
@@ -206,6 +223,10 @@ public class Main {
 	}
     
     
+    /**
+     * This method creates a set of String using a text file
+     * @return a HashSet of Strings, a 'dictionary'
+     */
 	public static Set<String>  makeDictionary () {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
@@ -223,6 +244,10 @@ public class Main {
 	}
 	
 	
+	/**
+	 * This method prints the ladder given the format provided in the assignment
+	 * @param ladder : an ArrayList of Strings, each word just one letter apart
+	 */
 	public static void printLadder(ArrayList<String> ladder) {
 		if (ladder.size() > 0){
 			int length = ladder.size();
