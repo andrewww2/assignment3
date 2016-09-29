@@ -79,7 +79,7 @@ public class Main {
 		for (int k = 0; k < 2; k++){
 			String word = keyboard.next();
 			if (word.equals("/quit")){
-				System.out.println("quitting");
+				System.exit(0);
 				return inputs; //return empty array List
 			}
 			inputs.add(word.toUpperCase());
