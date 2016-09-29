@@ -8,7 +8,7 @@
  * <jlw4699>
  * <16450>
  * Slip days used: <0>
- * Git URL: https://github.com/chernoalphha/422CAssignment3
+ * Git URL: https://github.com/chernoalphha/assignment3/
  * Fall 2016
  */
 
@@ -44,11 +44,6 @@ public class Main {
 		//Get inputs (start of ladder, end of ladder)
 		String start = inputs.get(0);
 		String end = inputs.get(1);
-<<<<<<< HEAD
-		//Output ladders using both BFS and DFS algorithms
-		printLadder(getWordLadderBFS(start,end));
-		printLadder(getWordLadderDFS(start,end));
-=======
 		ArrayList <String> BFS =  getWordLadderBFS(start,end);
 		System.out.println("Does BFS have duplicates? " + hasDuplicates(BFS));
 		printLadder(BFS);
@@ -58,7 +53,6 @@ public class Main {
 		printLadder(DFS);
 		//printLadder(getWordLadderBFS(start,end));
 		//printLadder(getWordLadderDFS(start,end));
->>>>>>> origin/master
 	}
 	
 	
