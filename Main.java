@@ -44,9 +44,21 @@ public class Main {
 		//Get inputs (start of ladder, end of ladder)
 		String start = inputs.get(0);
 		String end = inputs.get(1);
+<<<<<<< HEAD
 		//Output ladders using both BFS and DFS algorithms
 		printLadder(getWordLadderBFS(start,end));
 		printLadder(getWordLadderDFS(start,end));
+=======
+		ArrayList <String> BFS =  getWordLadderBFS(start,end);
+		System.out.println("Does BFS have duplicates? " + hasDuplicates(BFS));
+		printLadder(BFS);
+		
+		ArrayList <String> DFS =  getWordLadderDFS(start,end);
+		System.out.println("Does DFS have duplicates? " + hasDuplicates(DFS));
+		printLadder(DFS);
+		//printLadder(getWordLadderBFS(start,end));
+		//printLadder(getWordLadderDFS(start,end));
+>>>>>>> origin/master
 	}
 	
 	
@@ -320,5 +332,20 @@ public class Main {
 		
 		return reversedWordLadder;
 	}
+	
+	private static boolean hasDuplicates(ArrayList<String> wLadder){
+		if (wLadder.size() > 0){
+			for (int i = 0; i < wLadder.size(); i++){
+	    		for (int j = 0; j < wLadder.size(); j++){
+	    			if (i != j && wLadder.get(i).equals(wLadder.get(j))){
+	    				return true;
+	    			}
+	    		}
+	    	}
+			return false;
+		}
+    	
+    	return false;
+    }
 	
 }
