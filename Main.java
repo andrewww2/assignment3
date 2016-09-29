@@ -45,9 +45,15 @@ public class Main {
 		// TODO methods to read in words, output ladder
 		String start = inputs.get(0);
 		String end = inputs.get(1);
-		printLadder(getWordLadderBFS(start,end));
+		ArrayList <String> BFS =  getWordLadderBFS(start,end);
+		System.out.println("Does BFS have duplicates? " + hasDuplicates(BFS));
+		printLadder(BFS);
 		
-		printLadder(getWordLadderDFS(start,end));
+		ArrayList <String> DFS =  getWordLadderDFS(start,end);
+		System.out.println("Does DFS have duplicates? " + hasDuplicates(DFS));
+		printLadder(DFS);
+		//printLadder(getWordLadderBFS(start,end));
+		//printLadder(getWordLadderDFS(start,end));
 	}
 	
 	
@@ -295,5 +301,20 @@ public class Main {
 		
 		return reversedWordLadder;
 	}
+	
+	private static boolean hasDuplicates(ArrayList<String> wLadder){
+		if (wLadder.size() > 0){
+			for (int i = 0; i < wLadder.size(); i++){
+	    		for (int j = 0; j < wLadder.size(); j++){
+	    			if (i != j && wLadder.get(i).equals(wLadder.get(j))){
+	    				return true;
+	    			}
+	    		}
+	    	}
+			return false;
+		}
+    	
+    	return false;
+    }
 	
 }
