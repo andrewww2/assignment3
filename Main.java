@@ -22,7 +22,7 @@ public class Main {
 	// static variables and constants only here.
 	static Set<String> dictSet;
 	static ArrayList<String> dict;
-	static boolean[] dfsMarked;
+	static boolean[]  dfsMarked;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -97,6 +97,9 @@ public class Main {
 	 */
 	public static ArrayList<String> getWordLadderDFS(String start, String end)
 	{
+		initialize();
+		start = start.toUpperCase();
+		end = end.toUpperCase();
 		ArrayList<String> ladder= new ArrayList<String>();	//The ladder we return
 		boolean found = false;								//Lets us know if there is a path from start -> end
 		
@@ -182,6 +185,8 @@ public class Main {
 	 * @return : void, but does print word ladder
 	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
+    	start = start.toUpperCase();
+    	end = end.toUpperCase();
     	ArrayList<String> wordLadder = new ArrayList<String>();
 		Set<String> dict = makeDictionary();						//Complete list of words
 		ArrayList<String> discoveredWords = new ArrayList<String>();	//Used to store discovered words 
